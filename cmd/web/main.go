@@ -7,13 +7,29 @@ import (
 	"os"
 )
 
+// holds app-wide deps
+type application struct {
+	errorLog *log.Logger
+	infoLog  *log.Logger
+}
+
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 
 	flag.Parse()
 
+	// log.New returns a concurrency-safe logger and we can share the same logger to many goroutines
+	// but if multiple loggers write to the same dst we need to be careful
+	// it's better to log to stdout and redirect to a file at runtime
+	// alternatively, we can open a file in Go and use it as a log dst
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	// init a new instance containing the deps
+	app := &application{
+		errorLog: errorLog,
+		infoLog:  infoLog,
+	}
 
 	mux := http.NewServeMux()
 
@@ -21,9 +37,9 @@ func main() {
 
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
-	mux.HandleFunc("/", home)
-	mux.HandleFunc("/snippet/view", snippetView)
-	mux.HandleFunc("/snippet/create", snippetCreate)
+	mux.HandleFunc("/", app.home)
+	mux.HandleFunc("/snippet/view", app.snippetView)
+	mux.HandleFunc("/snippet/create", app.snippetCreate)
 
 	// setup http server to use the custom errorLog
 	srv := &http.Server{
