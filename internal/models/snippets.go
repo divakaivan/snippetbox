@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"errors"
 	"time"
 )
 
@@ -35,7 +36,33 @@ func (m *SnippetModel) Insert(title string, content string, expires int) (int, e
 }
 
 func (m *SnippetModel) Get(id int) (*Snippet, error) {
-	return nil, nil
+	stmt := `
+		select id, title, content, created, expires from snippets
+		where expires > UTC_TIMESTAMP() and id = ?
+	`
+
+	row := m.DB.QueryRow(stmt, id)
+
+	s := &Snippet{}
+
+	// Scan auto converts SQL types to Go types
+	// char, varchar, text -> string
+	// boolean -> bool
+	// int -> int; bigint -> int64
+	// decimal, numeric -> float
+	// time, date, timestamp -> time
+	// we pass parseTime=true in the sql string in main to force it to convert time and date fields to time.Time
+	// otherwise it's []byte objects
+	err := row.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, ErrNoRecord
+		} else {
+			return nil, err
+		}
+	}
+
+	return s, nil
 }
 
 func (m *SnippetModel) Latest() ([]*Snippet, error) {
