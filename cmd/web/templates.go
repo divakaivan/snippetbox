@@ -9,8 +9,9 @@ import (
 // define a new type to act as the holding structure for
 // any dynamic data passed to the html templates
 type templateData struct {
-	Snippet  *models.Snippet
-	Snippets []*models.Snippet
+	CurrentYear int
+	Snippet     *models.Snippet
+	Snippets    []*models.Snippet
 }
 
 func newTemplateCache() (map[string]*template.Template, error) {
