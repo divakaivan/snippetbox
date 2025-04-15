@@ -60,6 +60,7 @@ func (m *SnippetModel) Get(id int) (*Snippet, error) {
 		} else {
 			return nil, err
 		}
+
 	}
 
 	return s, nil
