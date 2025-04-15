@@ -67,6 +67,7 @@ func (m *SnippetModel) Get(id int) (*Snippet, error) {
 }
 
 func (m *SnippetModel) Latest() ([]*Snippet, error) {
+
 	stmt := `
 		select id, title, content, created, expires from snippets
 		where expires > UTC_TIMESTAMP() order by id desc limit 10
