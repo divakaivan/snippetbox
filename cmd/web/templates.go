@@ -11,11 +11,12 @@ import (
 // define a new type to act as the holding structure for
 // any dynamic data passed to the html templates
 type templateData struct {
-	CurrentYear int
-	Snippet     *models.Snippet
-	Snippets    []*models.Snippet
-	Form        any
-	Flash       string
+	CurrentYear     int
+	Snippet         *models.Snippet
+	Snippets        []*models.Snippet
+	Form            any
+	Flash           string
+	IsAuthenticated bool
 }
 
 // create and registering custom template functions
