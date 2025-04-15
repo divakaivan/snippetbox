@@ -51,7 +51,7 @@ func (m *SnippetModel) Get(id int) (*Snippet, error) {
 	// int -> int; bigint -> int64
 	// decimal, numeric -> float
 	// time, date, timestamp -> time
-	// we pass parseTime=true in the sql string in main to force to convert time and date fields to time.Time
+	// we pass parseTime=true in the sql string in main to force it to convert time and date fields to time.Time
 	// otherwise it's []byte objects
 	err := row.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)
 	if err != nil {
