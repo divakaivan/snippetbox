@@ -294,6 +294,7 @@ func (app *application) accountPasswordUpdatePost(w http.ResponseWriter, r *http
 			app.serverError(w, err)
 		}
 		return
+
 	}
 
 	app.sessionManager.Put(r.Context(), "flash", "Your password has been updated!")
