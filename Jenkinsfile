@@ -6,7 +6,8 @@ pipeline {
             steps {
                 sh 'go test ./...'
             }
-        },
+        }
+        
         stage('Push to Artifact Registry') {
             steps {
                 withCredentials([file(credentialsId: 'gcloud-creds', variable: 'GCLOUD_CREDS')]) {
