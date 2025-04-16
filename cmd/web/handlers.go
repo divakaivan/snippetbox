@@ -269,7 +269,7 @@ func (app *application) accountPasswordUpdatePost(w http.ResponseWriter, r *http
 
 	form.CheckField(validator.NotBlank(form.CurrentPassword), "currentPassword", "This field cannot be blank")
 	form.CheckField(validator.NotBlank(form.NewPassword), "newPassword", "This field cannot be blank")
-	form.CheckField(validator.MinChars(form.NewPassword, 8), "newPassowrd", "This field must be at least 8 characters long")
+	form.CheckField(validator.MinChars(form.NewPassword, 8), "newPassword", "This field must be at least 8 characters long")
 	form.CheckField(validator.NotBlank(form.NewPasswordConfirmation), "newPasswordConfirmation", "This field cannot be blank")
 	form.CheckField(form.NewPassword == form.NewPasswordConfirmation, "newPasswordConfirmation", "Passwords do not match")
 
@@ -299,5 +299,4 @@ func (app *application) accountPasswordUpdatePost(w http.ResponseWriter, r *http
 	app.sessionManager.Put(r.Context(), "flash", "Your password has been updated!")
 
 	http.Redirect(w, r, "/account/view", http.StatusSeeOther)
-
 }
