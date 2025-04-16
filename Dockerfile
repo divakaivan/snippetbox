@@ -16,7 +16,6 @@ WORKDIR /app
 
 COPY --from=builder /app/snippetbox .
 COPY ui ui
-COPY tls tls
 
 EXPOSE 4000
 

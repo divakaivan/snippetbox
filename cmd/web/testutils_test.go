@@ -57,7 +57,7 @@ type testServer struct {
 }
 
 func newTestServer(t *testing.T, h http.Handler) *testServer {
-	ts := httptest.NewTLSServer(h)
+	ts := httptest.NewServer(h)
 
 	jar, err := cookiejar.New(nil)
 	if err != nil {
