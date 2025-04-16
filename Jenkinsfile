@@ -17,7 +17,7 @@ pipeline {
                         gcloud auth activate-service-account --key-file="$GCLOUD_CREDS"
                         gcloud auth configure-docker asia-northeast3-docker.pkg.dev --quiet
                         docker build . --file Dockerfile --tag asia-northeast3/snippetbox-app:latest
-                        docker push asia-northeast3/snippetbox-app:latest
+                        docker push asia-northeast3-docker.pkg.dev/dataengcamp-427114/snippetbox-app/snippetbox-app:latest
                     '''
                 }
             }
