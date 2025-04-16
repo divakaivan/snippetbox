@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-playground/form/v4"
 	"github.com/justinas/nosurf"
+	"snippetbox.divakaivan.net/internal/models"
 )
 
 // writes an error msg and stack trace to the errorLog
@@ -92,4 +93,23 @@ func (app *application) isAuthenticated(r *http.Request) bool {
 		return false
 	}
 	return isAuthenticated
+}
+
+func (app *application) accountView(w http.ResponseWriter, r *http.Request) {
+	userID := app.sessionManager.GetInt(r.Context(), "authenticatedUserID")
+
+	user, err := app.users.Get(userID)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		} else {
+			app.serverError(w, err)
+		}
+		return
+	}
+
+	data := app.newTemplateData(r)
+	data.User = user
+
+	app.render(w, http.StatusOK, "account.html", data)
 }
