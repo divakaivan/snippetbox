@@ -38,7 +38,7 @@ func newTestApplication(t *testing.T) *application {
 
 	sessionManager := scs.New()
 	sessionManager.Lifetime = 12 * time.Hour
-	sessionManager.Cookie.Secure = true
+	sessionManager.Cookie.Secure = false
 
 	return &application{
 		errorLog:       log.New(io.Discard, "", 0),
@@ -57,7 +57,7 @@ type testServer struct {
 }
 
 func newTestServer(t *testing.T, h http.Handler) *testServer {
-	ts := httptest.NewTLSServer(h)
+	ts := httptest.NewServer(h)
 
 	jar, err := cookiejar.New(nil)
 	if err != nil {
