@@ -44,7 +44,7 @@ type testServer struct {
 }
 
 func newTestServer(t *testing.T, h http.Handler) *testServer {
-	ts := httptest.NewTLSServer(h)
+	ts := httptest.NewServer(h)
 
 	// for cookies
 	jar, err := cookiejar.New(nil)
@@ -66,11 +66,14 @@ func (ts *testServer) get(t *testing.T, urlPath string) (int, http.Header, strin
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	defer rs.Body.Close()
 	body, err := io.ReadAll(rs.Body)
+
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	bytes.TrimSpace(body)
 
 	return rs.StatusCode, rs.Header, string(body)
