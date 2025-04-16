@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        PATH = "$PATH:/opt/homebrew/bin:/usr/local/bin"
+    }
     stages {
         stage('Run Tests') {
             tools { go '1.24.2' }
@@ -12,9 +15,6 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'gcloud-creds', variable: 'GCLOUD_CREDS')]) {
                     sh '''
-                        export PATH=$PATH:/opt/homebrew/bin:/usr/local/bin
-                        
-                        # Set up GCP authentication for Docker
                         gcloud auth activate-service-account --key-file="$GCLOUD_CREDS"
                         gcloud auth configure-docker asia-northeast3-docker.pkg.dev --quiet
                     '''
