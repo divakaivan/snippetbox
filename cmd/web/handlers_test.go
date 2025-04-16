@@ -75,9 +75,9 @@ func TestUserSignup(t *testing.T) {
 	_, _, body := ts.get(t, "/user/signup")
 	validCSRFToken := extractCSRFToken(t, body)
 
-	const validName = "John Doe"
-	const validPassword = "password"
-	const validEmail = "test@test.com"
+	const validName = "Bob"
+	const validPassword = "pa$$word"
+	const validEmail = "bob@example.com"
 	const formTag = "<form action='/user/signup' method='POST' novalidate>"
 
 	tests := []struct {

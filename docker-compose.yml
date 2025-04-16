@@ -24,6 +24,7 @@ services:
       - "4000:4000"
     volumes:
       - ./ui:/app/ui
+      - ./tls:/app/tls
       - ./init.sql:/docker-entrypoint-initdb.d
     entrypoint: [ "sh", "-c", "until nc -z db 3306; do echo waiting for db; sleep 2; done; ./snippetbox -addr=:4000" ]
     networks:
