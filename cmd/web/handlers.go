@@ -293,7 +293,6 @@ func (app *application) accountPasswordUpdatePost(w http.ResponseWriter, r *http
 		} else if err != nil {
 			app.serverError(w, err)
 		}
-
 		return
 	}
 
