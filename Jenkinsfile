@@ -1,12 +1,12 @@
 pipeline {
-    agent any
-
+    agent {
+        docker { image 'golang:1.22' }
+    }
     stages {
-        stage('Echo Hello') {
+        stage('Test') {
             steps {
-                echo 'Hello from Jenkins!'
+                sh 'go test ./...'
             }
         }
     }
 }
-
