@@ -4,8 +4,19 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                // doubt
                 sh 'go test ./...'
+            }
+        },
+        stage('Push to Artifact Registry') {
+            steps {
+                withCredentials([file(credentialsId: 'gcloud-creds', variable: 'GCLOUD_CREDS')]) {
+                    sh '''
+                        export PATH=$PATH:/opt/homebrew/bin
+                        
+                        gcloud auth activate-service-account --key-file="$GCLOUD_CREDS"
+                        gcloud auth configure-docker asia-northeast3-docker.pkg.dev --quiet
+                    '''
+                }
             }
         }
     }
