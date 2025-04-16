@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	assert "snippetbox.divakaivan.net/internal/asserts"
+	"snippetbox.divakaivan.net/internal/assert"
 )
 
 func TestHumanData(t *testing.T) {
