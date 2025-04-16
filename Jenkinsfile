@@ -12,7 +12,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'gcloud-creds', variable: 'GCLOUD_CREDS')]) {
                     sh '''
-                        export PATH=$PATH:/opt/homebrew/bin
+                        export PATH=$PATH:/opt/homebrew/bin:/usr/local/bin
                         
                         gcloud auth activate-service-account --key-file="$GCLOUD_CREDS"
                         gcloud auth configure-docker asia-northeast3-docker.pkg.dev --quiet
