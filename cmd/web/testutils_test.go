@@ -1,13 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"html"
 	"io"
 	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"net/http/httptest"
+	"net/url"
 	"regexp"
 	"testing"
 	"time"
@@ -53,40 +53,51 @@ func newTestApplication(t *testing.T) *application {
 
 type testServer struct {
 	*httptest.Server
+	client *http.Client
 }
 
 func newTestServer(t *testing.T, h http.Handler) *testServer {
-	ts := httptest.NewServer(h)
+	ts := httptest.NewTLSServer(h)
 
-	// for cookies
 	jar, err := cookiejar.New(nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	ts.Client().Jar = jar
-
-	ts.Client().CheckRedirect = func(req *http.Request, via []*http.Request) error {
+	client := ts.Client()
+	client.Jar = jar
+	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 		return http.ErrUseLastResponse
 	}
 
-	return &testServer{ts}
+	return &testServer{ts, client}
+}
+func (ts *testServer) get(t *testing.T, path string) (int, http.Header, string) {
+	res, err := ts.client.Get(ts.URL + path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	return res.StatusCode, res.Header, string(body)
 }
 
-func (ts *testServer) get(t *testing.T, urlPath string) (int, http.Header, string) {
-	rs, err := ts.Client().Get(ts.URL + urlPath)
+func (ts *testServer) postForm(t *testing.T, path string, form url.Values) (int, http.Header, string) {
+	res, err := ts.client.PostForm(ts.URL+path, form)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	defer rs.Body.Close()
-	body, err := io.ReadAll(rs.Body)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	bytes.TrimSpace(body)
-
-	return rs.StatusCode, rs.Header, string(body)
+	return res.StatusCode, res.Header, string(body)
 }
