@@ -11,7 +11,7 @@ pipeline {
             }
         }
 
-        stage('Authenticate with GCP') {
+        stage('Auth GCP') {
             steps {
                 withCredentials([file(credentialsId: 'gcloud-creds', variable: 'GCLOUD_CREDS')]) {
                     sh '''
@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Image') {
             steps {
                 script {
                     env.IMAGE_TAG = "asia-northeast3-docker.pkg.dev/dataengcamp-427114/snippetbox-app/snippetbox-app:latest"
@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage('Push to Artifact Registry') {
+        stage('Push Image') {
             steps {
                 sh '''
                     echo "Pushing image with tag: $IMAGE_TAG"
