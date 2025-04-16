@@ -18,7 +18,7 @@ func TestUserModelExists(t *testing.T) {
 		userID int
 		want   bool
 	}{
-		{name: "Valid ID", userID: 1, want: true},
+		{name: "Valid ID", userID: 1, want: true}, // true
 		{name: "Zero ID", userID: 0, want: false},
 		{name: "Non-existent ID", userID: 2, want: false},
 	}

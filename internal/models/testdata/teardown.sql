@@ -1,3 +1,3 @@
-DROP TABLE users_test;
+DROP TABLE users;
 
-DROP TABLE snippets_test;
+DROP TABLE snippets;
