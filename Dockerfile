@@ -9,8 +9,7 @@ COPY . .
 
 RUN go build -o snippetbox ./cmd/web
 
-# final image
-FROM alpine:latest
+FROM scratch
 
 WORKDIR /app
 
